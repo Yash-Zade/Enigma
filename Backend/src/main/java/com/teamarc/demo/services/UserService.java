@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+    private final SenderService senderService;
+    private final ReceiverService receiverService;
 
 
     @Override
@@ -31,9 +33,19 @@ public class UserService implements UserDetailsService {
         return userRepository.findByRoles(role);
     }
 
-    public void setUserRole(Role role) {
+    public void setUserRoleToSender(Role role) {
         User user = loadUserByRole(role);
         user.getRoles().add(role);
         userRepository.save(user);
+        senderService.createSender(user);
+
+    }
+
+    public void setUserRoleToReceiver(Role role) {
+        User user = loadUserByRole(role);
+        user.getRoles().add(role);
+        userRepository.save(user);
+        receiverService.createReceiver(user);
+
     }
 }

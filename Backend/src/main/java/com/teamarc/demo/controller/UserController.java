@@ -15,8 +15,13 @@ public class UserController {
     private final UserService userService;
 
 
-    @PostMapping("/role")
-    public void setUserRole(Role role) {
-        userService.setUserRole(role);
+    @PostMapping("/role/sender")
+    public void setUserRoleToSender(Role role) {
+        userService.setUserRoleToSender(role);
+    }
+
+    @PostMapping("/role/receiver")
+    public void setUserRoleToReceiver(Role role) {
+        userService.setUserRoleToReceiver(role);
     }
 }
