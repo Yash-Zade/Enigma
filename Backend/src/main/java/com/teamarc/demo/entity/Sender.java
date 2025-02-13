@@ -23,6 +23,6 @@ public class Sender {
     @OneToMany
     private List<Receiver> receiver;
 
-    private UUID senderId=UUID.randomUUID();
+    private UUID senderId;
 
 }

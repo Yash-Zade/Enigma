@@ -1,9 +1,8 @@
 package com.teamarc.demo.controller;
 
-import com.teamarc.demo.entity.enums.Role;
 import com.teamarc.demo.services.UserService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,12 +15,14 @@ public class UserController {
 
 
     @PostMapping("/role/sender")
-    public void setUserRoleToSender(Role role) {
-        userService.setUserRoleToSender(role);
+    public ResponseEntity<Void> setSenderRoleToUser() {
+        userService.setSenderRoleToUser();
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/role/receiver")
-    public void setUserRoleToReceiver(Role role) {
-        userService.setUserRoleToReceiver(role);
+    public ResponseEntity<Void> setReceiverRoleToUser() {
+        userService.setReceiverRoleToUser();
+        return ResponseEntity.ok().build();
     }
 }

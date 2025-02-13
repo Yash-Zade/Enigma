@@ -10,10 +10,9 @@ import com.teamarc.demo.services.SenderConnectionRequestService;
 import com.teamarc.demo.services.SenderService;
 import com.teamarc.demo.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -27,13 +26,30 @@ public class ReceiverController {
 
 
     @PostMapping("/connection/request")
-    public void sendConnectionRequest(UUID senderId) {
+    public ResponseEntity<Void> sendConnectionRequest(UUID senderId) {
         SenderConnectionRequest request = SenderConnectionRequest.builder()
                 .senderId(senderId)
                 .receiverId(receiverService.getCurrentReceiver().getId())
                 .build();
         senderConnectionRequestService.addConnectionRequest(request);
+        return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/profile")
+    public ResponseEntity<Receiver> getProfile() {
+        return ResponseEntity.ok(receiverService.getCurrentReceiver());
+    }
+
+    @GetMapping("/request/tracking/{id}")
+    public ResponseEntity<Void> addTrackingRequest(@PathVariable Long id) {
+        receiverService.addTrackingRequest(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/tracking/track/{id}")
+    public ResponseEntity<Void> track(@PathVariable Long id) {
+        receiverService.track(id);
+        return ResponseEntity.ok().build();
+    }
 
 }
