@@ -14,7 +14,6 @@ import java.util.List;
 @RequestMapping("/sender")
 public class SenderController {
 
-    private final SenderConnectionRequestService senderConnectionRequestService;
     private final SenderService senderService;
 
 
@@ -26,6 +25,12 @@ public class SenderController {
     @PostMapping("/connection/accept/{receiverId}")
     public ResponseEntity<Void> acceptConnectionRequest(@PathVariable Long receiverId) {
         senderService.acceptConnectionRequest(receiverId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/connection/reject/{receiverId}")
+    public ResponseEntity<Void> rejectConnectionRequest(@PathVariable Long receiverId) {
+        senderService.rejectConnectionRequest(receiverId);
         return ResponseEntity.ok().build();
     }
 }

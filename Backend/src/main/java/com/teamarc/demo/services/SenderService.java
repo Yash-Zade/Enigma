@@ -1,9 +1,11 @@
 package com.teamarc.demo.services;
 
+import com.teamarc.demo.entity.Receiver;
 import com.teamarc.demo.entity.Sender;
 import com.teamarc.demo.entity.SenderConnectionRequest;
 import com.teamarc.demo.entity.User;
 import com.teamarc.demo.exceptions.ResourceNotFoundException;
+import com.teamarc.demo.repository.ReceiverRepository;
 import com.teamarc.demo.repository.SenderConnectionRequestRepository;
 import com.teamarc.demo.repository.SenderRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class SenderService {
     private final SenderConnectionRequestRepository senderConnectionRequestRepository;
     private final SenderConnectionRequestService senderConnectionRequestService;
     private final ReceiverService receiverService;
+    private final ReceiverRepository receiverRepository;
 
     public void createSender(User user) {
         Sender sender = Sender.builder()
@@ -44,11 +47,21 @@ public class SenderService {
 
     public void acceptConnectionRequest(Long receiverId) {
         Sender sender = getCurrentSender();
+        Receiver receiver = receiverService.getReceiverById(receiverId);
         SenderConnectionRequest request = senderConnectionRequestService.getSenderConnectionRequestByReceiverIdAndSenderId(receiverId, sender.getSenderId())
                 .orElseThrow(()-> new ResourceNotFoundException("Connection request not found"));
         senderConnectionRequestService.deleteConnectionRequest(request);
 
          sender.setReceiver(List.of(receiverService.getReceiverById(receiverId)));
+         receiver.setSenders(List.of(sender));
+         senderRepository.save(sender);
+         receiverRepository.save(receiver);
+    }
 
+    public void rejectConnectionRequest(Long receiverId) {
+        Sender sender = getCurrentSender();
+        SenderConnectionRequest request = senderConnectionRequestService.getSenderConnectionRequestByReceiverIdAndSenderId(receiverId, sender.getSenderId())
+                .orElseThrow(()-> new ResourceNotFoundException("Connection request not found"));
+        senderConnectionRequestService.deleteConnectionRequest(request);
     }
 }
