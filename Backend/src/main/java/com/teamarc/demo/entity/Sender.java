@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -21,5 +22,7 @@ public class Sender {
 
     @OneToMany
     private List<Receiver> receiver;
+
+    private UUID senderId=UUID.randomUUID();
 
 }

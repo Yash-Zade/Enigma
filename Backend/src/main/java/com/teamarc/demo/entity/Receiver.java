@@ -23,4 +23,5 @@ public class Receiver {
 
     @OneToMany
     private List<Sender> senders;
+
 }
