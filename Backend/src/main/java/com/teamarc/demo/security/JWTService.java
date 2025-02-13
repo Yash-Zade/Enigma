@@ -44,6 +44,16 @@ public class JWTService {
                 .compact();
     }
 
+    public String generateTrackingToken(User sender,User receiver, Long time) {
+        return Jwts.builder()
+                .subject(Long.toString(sender.getId()))
+                .subject(Long.toString(receiver.getId()))
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + time))
+                .signWith(getSecretKey())
+                .compact();
+    }
+
     public Long getUserIdFromToken(String token) {
         Claims claims = Jwts.parser()
                 .verifyWith(getSecretKey())

@@ -30,4 +30,10 @@ public class UserService implements UserDetailsService {
     public User loadUserByRole(Role role) {
         return userRepository.findByRoles(role);
     }
+
+    public void setUserRole(Role role) {
+        User user = loadUserByRole(role);
+        user.getRoles().add(role);
+        userRepository.save(user);
+    }
 }
